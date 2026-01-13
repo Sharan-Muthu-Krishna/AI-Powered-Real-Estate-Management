@@ -1,0 +1,77 @@
+############################################
+# OS / Editor / IDE SETTINGS
+############################################
+.DS_Store
+Thumbs.db
+*.log
+
+# VS Code
+.vscode/
+
+############################################
+# JAVA / MAVEN / SPRING BOOT
+############################################
+target/
+*.class
+*.jar
+*.war
+
+# Maven Wrapper (keep '.mvn' but ignore logs)
+.mvn/wrapper/*.jar
+.mvn/wrapper/maven-wrapper.jar
+
+############################################
+# PYTHON MODULES (MODULE 2 & 3)
+############################################
+# Ignore all virtual environments
+venv/
+*/venv/
+**/venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+############################################
+# SECURITY / SECRETS
+############################################
+# Ignore all .env files everywhere
+.env
+**/.env
+
+# Ignore local database config if present
+*.db
+*.sqlite
+
+############################################
+# UPLOADS / GENERATED MEDIA FILES
+############################################
+# Property image uploads folder (keep empty folder if needed)
+uploads/
+**/uploads/
+
+# AI / RAG / ML MODEL FILES
+*.pt
+*.pth
+*.pkl
+*.bin
+*.h5
+*.onnx
+models/
+data/
+checkpoints/
+# Machine Learning / AI Large Models
+*.pt
+*.pth
+*.keras
+*.h5
+*.bin
+*.pkl
+*.faiss
+faiss_index/
+checkpoints/
+
+/RAG/
+allfiles.txt
+To Test/sorted_sizes.txt

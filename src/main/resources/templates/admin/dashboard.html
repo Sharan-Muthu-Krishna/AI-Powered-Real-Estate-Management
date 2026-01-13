@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="bg-light">
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4" >
+            <div>
+                <h1 class="fw-bold mb-2">Admin Dashboard</h1>
+                <p class="text-muted mb-0">Welcome back! Here's an overview of your system</p>
+            </div>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4" data-aos-delay="100">
+                <div class="card border-0 shadow-sm hover-card h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-primary text-white rounded me-3">
+                                <i class="bi bi-people-fill fs-3"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Total Users</h6>
+                                <h2 class="fw-bold mb-0" th:text="${totalUsers}">0</h2>
+                            </div>
+                        </div>
+                        <a th:href="@{/admin/users}" class="btn btn-sm btn-outline-primary mt-3 w-100">
+                            <i class="bi bi-arrow-right me-2"></i>Manage Users
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4" data-aos-delay="200">
+                <div class="card border-0 shadow-sm hover-card h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-success text-white rounded me-3">
+                                <i class="bi bi-house-fill fs-3"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Total Properties</h6>
+                                <h2 class="fw-bold mb-0" th:text="${totalProperties}">0</h2>
+                            </div>
+                        </div>
+                        <a th:href="@{/admin/properties}" class="btn btn-sm btn-outline-success mt-3 w-100">
+                            <i class="bi bi-arrow-right me-2"></i>Manage Properties
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4"  data-aos-delay="300">
+                <div class="card border-0 shadow-sm hover-card h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-warning text-white rounded me-3">
+                                <i class="bi bi-chat-dots-fill fs-3"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Active Inquiries</h6>
+                                <h2 class="fw-bold mb-0" th:text="${activeInquiries}">0</h2>
+                            </div>
+                        </div>
+                        <a th:href="@{/admin/inquiries}" class="btn btn-sm btn-outline-warning mt-3 w-100">
+                            <i class="bi bi-arrow-right me-2"></i>Manage Inquiries
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="card border-0 shadow-sm mb-4" >
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-4">Quick Actions</h5>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <a th:href="@{/admin/properties}" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Add Property
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a th:href="@{/admin/users}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-people me-2"></i>View Users
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a th:href="@{/admin/inquiries}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-chat-dots me-2"></i>View Inquiries
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a th:href="@{/properties}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-globe me-2"></i>View Public Site
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Properties -->
+        <div class="card border-0 shadow-sm" >
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-4">Recent Properties</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Location</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="property : ${recentProperties}">
+                                <td th:text="${property.title}">Property Title</td>
+                                <td th:text="${property.location}">Location</td>
+                                <td><span class="badge bg-primary" th:text="${property.type}">Type</span></td>
+                                <td class="fw-bold">
+                                    $<span th:text="${#numbers.formatDecimal(property.price, 0, 'COMMA', 0, 'POINT')}">0</span>
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(property.size, 0, 'COMMA', 0, 'POINT')} + ' sq ft'">0 sq ft</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

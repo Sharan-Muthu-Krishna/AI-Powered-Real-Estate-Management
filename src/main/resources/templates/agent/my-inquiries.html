@@ -1,0 +1,71 @@
+<!-- agent/my-inquiries.html - src/main/resources/templates/agent/my-inquiries.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="bg-light">
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+        <div class="d-flex justify-content-between align-items-center mb-4" >
+            <div>
+                <h1 class="fw-bold mb-2">Customer Inquiries</h1>
+                <p class="text-muted mb-0">Manage customer inquiries</p>
+            </div>
+            <a th:href="@{/agent/dashboard}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+        
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert" >
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div class="card border-0 shadow-sm" >
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Customer</th>
+                                <th>Property</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="inquiry : ${inquiries}">
+                                <td th:text="${inquiry.user.name}">Customer</td>
+                                <td th:text="${inquiry.property.title}">Property</td>
+                                <td>
+                                    <span th:text="${#strings.abbreviate(inquiry.message, 40)}">Message</span>
+                                </td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${inquiry.status == 'PENDING' ? 'bg-warning' : 
+                                                          (inquiry.status == 'CONTACTED' ? 'bg-info' : 'bg-success')}"
+                                          th:text="${inquiry.status}">Status</span>
+                                </td>
+                                <td th:text="${#temporals.format(inquiry.timestamp, 'MMM dd')}">Date</td>
+                                <td>
+                                    <form th:action="@{/inquiries/update-status}" method="post" class="d-inline">
+                                        <input type="hidden" name="id" th:value="${inquiry.id}">
+                                        <input type="hidden" name="status" value="CONTACTED">
+                                        <input type="hidden" name="returnUrl" value="/agent/inquiries">
+                                        <button type="submit" class="btn btn-sm btn-info text-white">Contact</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

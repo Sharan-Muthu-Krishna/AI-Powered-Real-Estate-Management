@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="bg-light">
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+        <!-- Page Header -->
+        <div class="text-center mb-5" >
+            <h1 class="fw-bold">All Properties</h1>
+            <p class="text-muted">Browse through our extensive collection of properties</p>
+        </div>
+        
+        <!-- Search Filters -->
+        <div class="card shadow-sm border-0 mb-5">
+            <div class="card-body p-4">
+                <form th:action="@{/properties}" method="get">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-tag me-2"></i>Property Type
+                            </label>
+                            <select name="type" class="form-select" th:value="${selectedType}">
+                                <option value="">All Types</option>
+                                <option value="House" th:selected="${selectedType == 'House'}">House</option>
+                                <option value="Apartment" th:selected="${selectedType == 'Apartment'}">Apartment</option>
+                                <option value="Villa" th:selected="${selectedType == 'Villa'}">Villa</option>
+                                <option value="Commercial" th:selected="${selectedType == 'Commercial'}">Commercial</option>
+                                <option value="Land" th:selected="${selectedType == 'Land'}">Land</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt me-2"></i>Location
+                            </label>
+                            <input type="text" name="location" class="form-control" 
+                                   placeholder="Enter location" th:value="${selectedLocation}">
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">Min Price</label>
+                            <input type="number" name="minPrice" class="form-control" 
+                                   placeholder="$0" th:value="${minPrice}">
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">Max Price</label>
+                            <input type="number" name="maxPrice" class="form-control" 
+                                   placeholder="$999,999,999" th:value="${maxPrice}">
+                        </div>
+                        
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search me-2"></i>Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Results Count -->
+        <div class="mb-4" >
+            <p class="text-muted">
+                Found <strong th:text="${properties.size()}">0</strong> properties
+            </p>
+        </div>
+        
+        <!-- Property Grid -->
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" th:each="property, iterStat : ${properties}" 
+                 th:attr="data-aos-delay=${iterStat.index * 50}">
+                <div class="card h-100 border-0 shadow-sm property-card">
+                    <div class="property-image-wrapper">
+                        <img th:src="${property.imageUrl}" class="card-img-top property-image" 
+                             th:alt="${property.title}">
+                        <span class="badge bg-primary property-badge" th:text="${property.type}">Type</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold" th:text="${property.title}">Property Title</h5>
+                        <p class="text-muted mb-2">
+                            <i class="bi bi-geo-alt-fill text-primary me-1"></i>
+                            <span th:text="${property.location}">Location</span>
+                        </p>
+                        <p class="text-muted mb-3 property-description" th:text="${property.description}">Description</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="text-primary mb-0 fw-bold">
+                                    $<span th:text="${#numbers.formatDecimal(property.price, 0, 'COMMA', 0, 'POINT')}">0</span>
+                                </h4>
+                                <small class="text-muted">
+                                    <i class="bi bi-rulers me-1"></i>
+                                    <span th:text="${#numbers.formatDecimal(property.size, 0, 'COMMA', 0, 'POINT')}">0</span> sq ft
+                                </small>
+                            </div>
+                        </div>
+                        <a th:href="@{/properties/{id}(id=${property.id})}" class="btn btn-primary w-100">
+                            <i class="bi bi-eye me-2"></i>View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- No Results -->
+        <div th:if="${properties.empty}" class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+            <h4 class="text-muted">No properties found</h4>
+            <p class="text-muted">Try adjusting your search filters</p>
+            <a th:href="@{/properties}" class="btn btn-primary mt-3">
+                <i class="bi bi-arrow-clockwise me-2"></i>Clear Filters
+            </a>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

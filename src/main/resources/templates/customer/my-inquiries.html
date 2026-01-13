@@ -1,0 +1,72 @@
+<!-- customer/my-inquiries.html - src/main/resources/templates/customer/my-inquiries.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="bg-light">
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold mb-2">My Inquiries</h1>
+                <p class="text-muted mb-0">Track the status of your property inquiries</p>
+            </div>
+            <a th:href="@{/customer/dashboard}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+        
+        <div class="card border-0 shadow-sm" >
+            <div class="card-body p-4">
+                <div th:if="${inquiries.empty}" class="text-center py-5">
+                    <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+                    <h4 class="text-muted">No inquiries yet</h4>
+                    <p class="text-muted">Start browsing properties and send inquiries</p>
+                    <a th:href="@{/properties}" class="btn btn-primary mt-3">
+                        Browse Properties
+                    </a>
+                </div>
+                
+                <div th:if="${!inquiries.empty}" class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Property</th>
+                                <th>Location</th>
+                                <th>Your Message</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="inquiry : ${inquiries}">
+                                <td th:text="${inquiry.property.title}">Property</td>
+                                <td th:text="${inquiry.property.location}">Location</td>
+                                <td>
+                                    <span th:text="${#strings.abbreviate(inquiry.message, 50)}">Message</span>
+                                </td>
+                                <td>
+                                    <span class="badge" 
+                                          th:classappend="${inquiry.status == 'PENDING' ? 'bg-warning' : 
+                                                          (inquiry.status == 'CONTACTED' ? 'bg-info' : 'bg-success')}"
+                                          th:text="${inquiry.status}">Status</span>
+                                </td>
+                                <td th:text="${#temporals.format(inquiry.timestamp, 'MMM dd, yyyy')}">Date</td>
+                                <td>
+                                    <a th:href="@{/properties/{id}(id=${inquiry.property.id})}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> View Property
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
