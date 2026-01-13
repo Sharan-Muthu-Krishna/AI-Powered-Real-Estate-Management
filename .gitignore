@@ -72,6 +72,6 @@ checkpoints/
 faiss_index/
 checkpoints/
 
-/RAG/
+
 allfiles.txt
 To Test/sorted_sizes.txt
