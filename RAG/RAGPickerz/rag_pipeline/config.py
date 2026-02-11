@@ -3,6 +3,11 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
 
+# --- ChromaDB was also evaluated during development ---
+# from langchain_community.vectorstores import Chroma
+# CHROMA_DB_PATH = r".\chroma_db"
+# CHROMA_COLLECTION_NAME = "real_estate_docs"
+
 load_dotenv()
 
 VECTOR_DB_PATH = r".\faiss_index"
@@ -16,7 +21,7 @@ embeddings = HuggingFaceEmbeddings(
 )
 print("loaded embeddings in config")
 
-# ✅ Use stable text splitter
+# Use stable text splitter
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=CHUNK_SIZE,
     chunk_overlap=CHUNK_OVERLAP

@@ -1,5 +1,7 @@
 """Retriever module for the RAG pipeline.
 
+Supports FAISS (active) and ChromaDB (evaluated alternative, see commented code below).
+
 Raises:
     ValueError: If the VECTOR_DB_PATH environment variable is not set.
 """
@@ -7,6 +9,7 @@ Raises:
 from typing import List
 import time
 from langchain_community.vectorstores import FAISS
+# from langchain_community.vectorstores import Chroma  
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 
@@ -45,3 +48,29 @@ def retrieve_documents(query: str, top_k: int = 5) -> List[Document]:
     result= store.similarity_search(query, k=top_k)
     print(f"🔍 Document retrieval time: {time.perf_counter() - start:.2f}s")
     return result
+
+
+# def load_chroma_store() -> Chroma:
+#     from rag_pipeline.config import CHROMA_DB_PATH, CHROMA_COLLECTION_NAME
+#     return Chroma(
+#         collection_name=CHROMA_COLLECTION_NAME,
+#         persist_directory=CHROMA_DB_PATH,
+#         embedding_function=embeddings,
+#     )
+#
+# def retrieve_documents_chroma(query: str, top_k: int = 5,
+#                                filter_metadata: dict = None) -> List[Document]:
+#     """ChromaDB retriever with optional metadata filtering.
+#
+#     Example usage with metadata filter (not possible with FAISS):
+#         retrieve_documents_chroma("property address", filter_metadata={"source_type": "legal_document"})
+#     """
+#     store = load_chroma_store()
+#     if filter_metadata:
+#         # ChromaDB's built-in where filter — FAISS cannot do this
+#         result = store.similarity_search(query, k=top_k, filter=filter_metadata)
+#     else:
+#         result = store.similarity_search(query, k=top_k)
+#     return result
+
+

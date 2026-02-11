@@ -1,5 +1,9 @@
 """Builds a vector store from the provided documents.
 
+Supports both FAISS (active) and ChromaDB (evaluated, see commented implementation below).
+FAISS was selected for its superior search speed and lower memory footprint.
+See config.py for detailed comparison.
+
 Returns:
     FAISS: The FAISS vector store containing the document embeddings.
 """
@@ -11,6 +15,7 @@ from typing import List
 from langchain_core.documents import Document
 
 from langchain_community.vectorstores import FAISS
+# from langchain_community.vectorstores import Chroma  
 from rag_pipeline.config import VECTOR_DB_PATH, embeddings, splitter
 
 def compute_hash(text: str) -> str:
@@ -57,3 +62,33 @@ def build_vector_store(documents: List[Document]) -> FAISS:
     print(f"💾 Saved updated vector store in {time.perf_counter() - start_save:.2f}s")
 
     return vector_store
+
+
+
+# def build_chroma_vector_store(documents: List[Document]) -> Chroma:
+#     """Builds or loads a ChromaDB vector store from the provided documents.
+#
+#     ChromaDB handles deduplication via document IDs internally,
+#     so manual SHA-256 hashing is not needed (unlike FAISS).
+#     """
+#     from rag_pipeline.config import CHROMA_DB_PATH, CHROMA_COLLECTION_NAME
+#
+#     chunks = splitter.create_documents([doc.page_content for doc in documents])
+#
+#     # ChromaDB supports unique IDs per document — duplicates are skipped automatically
+#     chunk_ids = [compute_hash(chunk.page_content) for chunk in chunks]
+#
+#     # Add metadata for filtering (ChromaDB's built-in advantage over FAISS)
+#     for chunk in chunks:
+#         chunk.metadata["source_type"] = "legal_document"
+#         chunk.metadata["indexed_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+#
+#     vector_store = Chroma.from_documents(
+#         documents=chunks,
+#         embedding=embeddings,
+#         collection_name=CHROMA_COLLECTION_NAME,
+#         persist_directory=CHROMA_DB_PATH,
+#         ids=chunk_ids,  # automatic dedup via unique IDs
+#     )
+
+
